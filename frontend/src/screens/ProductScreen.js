@@ -10,6 +10,9 @@ import Rating from '../components/Rating';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
+import { getError } from '../utils';
 
 const ProductScreen = () => {
   const params = useParams();
@@ -28,16 +31,16 @@ const ProductScreen = () => {
         const result = await axios.get(`/api/products/slug/${slug}`);
         dispatch({ type: 'FETCH_PRODUCT_SUCCESS', payload: result.data });
       } catch (error) {
-        dispatch({ type: 'FETCH_PRODUCT_FAIL', payload: error.message });
+        dispatch({ type: 'FETCH_PRODUCT_FAIL', payload: getError(error) });
       }
     };
     fetchData();
   }, [slug]);
   console.log(product);
   return loading ? (
-    <div>Loading...</div>
+    <LoadingBox />
   ) : error ? (
-    <div>{error}</div>
+    <MessageBox variant="danger">{error}</MessageBox>
   ) : (
     <div>
       <Row>
