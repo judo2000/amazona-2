@@ -1,14 +1,13 @@
 import express from 'express';
 import data from './data.js';
 
-const PORT = process.env.PORT || 5000;
-
 const app = express();
-
+// test
 app.get('/api/products', (req, res) => {
   res.send(data.products);
 });
 
-app.listen(PORT, () => {
-  console.log(`API server running at http://localhost:${PORT}`);
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+  console.log(`serve at http://localhost:${port}`);
 });
