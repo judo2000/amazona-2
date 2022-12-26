@@ -27,7 +27,7 @@ function Product(props) {
       payload: { ...item, quantity },
     });
   };
-  console.log('product count in stock :', product.countInStock);
+
   return (
     <Card>
       <Link to={`/product/${product.slug}`}>
