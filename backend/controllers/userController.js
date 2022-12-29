@@ -21,4 +21,22 @@ const signinUser = expressAsyncHandler(async (req, res) => {
   res.status(401).send({ message: 'Invalid email or password' });
 });
 
-export { signinUser };
+const signupUser = expressAsyncHandler(async (req, res) => {
+  const newUser = new User({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password),
+  });
+  const user = await newUser.save();
+  res.send({
+    _id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    token: generateToken(user),
+  });
+});
+
+export { signinUser, signupUser };
