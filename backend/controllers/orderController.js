@@ -18,6 +18,12 @@ const createOrder = expressAsyncHandler(async (req, res) => {
   res.status(201).send({ message: 'New Order Created', order });
 });
 
+const getMyOrders = expressAsyncHandler(async (req, res) => {
+  console.log('getting the backend');
+  const orders = await Order.find({ user: req.user._id });
+  res.send(orders);
+});
+
 const getSingleOrder = expressAsyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
   if (order) {
@@ -46,4 +52,4 @@ const setOrderToPaid = expressAsyncHandler(async (req, res) => {
   }
 });
 
-export { createOrder, getSingleOrder, setOrderToPaid };
+export { createOrder, getSingleOrder, setOrderToPaid, getMyOrders };

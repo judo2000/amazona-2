@@ -10,7 +10,8 @@ const signinUser = expressAsyncHandler(async (req, res) => {
     if (bcrypt.compareSync(req.body.password, user.password)) {
       res.send({
         _id: user._id,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         isAdmin: user.isAdmin,
         token: generateToken(user),
