@@ -4,7 +4,7 @@ import {
   getProducts,
   getProductBySlug,
   getProductById,
-} from '../controllers/productController.js';
+} from '../controllers/productController';
 
 router.route('/').get(getProducts);
 router.route('/slug/:slug').get(getProductBySlug);
