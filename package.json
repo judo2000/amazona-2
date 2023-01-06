@@ -6,7 +6,7 @@
     "concurrently": "^7.6.0"
   },
   "scripts": {
-    "dev": "concurrently \"cd backend && npm run watch\" \"cd frontend && npm start\"",
+    "dev": "concurrently \"cd backend && npm run start\" \"cd frontend && npm start\"",
     "install": "cd backend && npm i && cd ../frontend && npm install",
     "start": "node backend/server.js",
     "build": "cd backend && npm install && cd ../frontend && npm run build"
