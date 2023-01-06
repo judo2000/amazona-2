@@ -1,4 +1,5 @@
 // const mongoose = require('mongoose');
+
 import mongoose from 'mongoose';
 
 const connectDB = async () => {
@@ -18,6 +19,7 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
+
 // mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1/amazona2', {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,

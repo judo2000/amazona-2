@@ -1,16 +1,15 @@
 {
   "name": "amazona-2",
   "version": "1.0.0",
-  "description": "",
   "main": "backend/server.js",
   "devDependencies": {
     "concurrently": "^7.6.0"
   },
   "scripts": {
-    "start": "node backend/server.js",
     "dev": "concurrently \"cd backend && npm run watch\" \"cd frontend && npm start\"",
-    "install": "cd backend && npm i && cd ../frontend && npm i",
-    "build": "cd frontend && npm run build"
+    "install": "cd backend && npm i && cd ../frontend && npm install",
+    "start": "node backend/server.js",
+    "build": "cd backend && npm install && cd ../frontend && npm run build"
   },
   "repository": {
     "type": "git",
@@ -22,5 +21,34 @@
   "bugs": {
     "url": "https://github.com/judo2000/amazona-2/issues"
   },
-  "homepage": "https://github.com/judo2000/amazona-2#readme"
+  "homepage": "https://github.com/judo2000/amazona-2#readme",
+  "dependencies": {
+    "ansi-styles": "^4.3.0",
+    "ansi-regex": "^5.0.1",
+    "chalk": "^4.1.2",
+    "emoji-regex": "^8.0.0",
+    "cliui": "^8.0.1",
+    "color-name": "^1.1.4",
+    "rxjs": "^7.8.0",
+    "has-flag": "^4.0.0",
+    "date-fns": "^2.29.3",
+    "get-caller-file": "^2.0.5",
+    "escalade": "^3.1.1",
+    "lodash": "^4.17.21",
+    "color-convert": "^2.0.1",
+    "spawn-command": "^0.0.2-1",
+    "is-fullwidth-code-point": "^3.0.0",
+    "shell-quote": "^1.7.4",
+    "strip-ansi": "^6.0.1",
+    "string-width": "^4.2.3",
+    "wrap-ansi": "^7.0.0",
+    "require-directory": "^2.1.1",
+    "supports-color": "^8.1.1",
+    "yargs": "^17.6.2",
+    "y18n": "^5.0.8",
+    "yargs-parser": "^21.1.1",
+    "tree-kill": "^1.2.2",
+    "tslib": "^2.4.1"
+  },
+  "description": ""
 }
