@@ -1,9 +1,15 @@
+import expressAsyncHandler from 'express-async-handler';
 import Product from '../models/ProductModel.js';
 
 const getProducts = async (req, res) => {
   const products = await Product.find({});
   res.send(products);
 };
+
+const getCategories = expressAsyncHandler(async (req, res) => {
+  const categories = await Product.find().distinct('category');
+  res.send(categories);
+});
 
 const getProductBySlug = async (req, res) => {
   const product = await Product.findOne({ slug: req.params.slug });
@@ -24,4 +30,4 @@ const getProductById = async (req, res) => {
   }
 };
 
-export { getProducts, getProductBySlug, getProductById };
+export { getProducts, getProductBySlug, getProductById, getCategories };
