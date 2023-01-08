@@ -8,7 +8,7 @@ const getProducts = async (req, res) => {
 
 const createProduct = expressAsyncHandler(async (req, res) => {
   const newProduct = new Product({
-    name: 'sample name' + Date.now(),
+    name: 'sample name ' + Date.now(),
     slug: 'sample name-' + Date.now(),
     image: '/image/p1.jpg',
     price: 0,

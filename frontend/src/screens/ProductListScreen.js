@@ -116,6 +116,7 @@ const ProductListScreen = () => {
                 <td>PRICE</td>
                 <td>CATEGORY</td>
                 <td>BRAND</td>
+                <td>ACTIONS</td>
               </tr>
             </thead>
             <tbody>
@@ -126,6 +127,15 @@ const ProductListScreen = () => {
                   <td>{product.price}</td>
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
+                  <td>
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => navigate(`/admin/product/${product._id}`)}
+                    >
+                      Edit
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
