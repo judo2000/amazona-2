@@ -7,10 +7,12 @@ import {
   getCategories,
   searchProducts,
   adminProducts,
+  createProduct,
 } from '../controllers/productController.js';
 import { isAdmin, isAuth } from '../utils.js';
 
 router.route('/').get(getProducts);
+router.route('/').post(createProduct);
 router.route('/admin').get(isAuth, isAdmin, adminProducts);
 router.route('/search').get(searchProducts);
 router.route('/categories').get(getCategories);
