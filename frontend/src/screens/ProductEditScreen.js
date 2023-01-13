@@ -1,15 +1,15 @@
-import axios from 'axios';
 import React, { useContext, useEffect, useReducer, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import axios from 'axios';
+import { Store } from '../Store';
+import { getError } from '../utils';
 import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-import { Store } from '../Store';
-import { getError } from '../utils';
+import Button from 'react-bootstrap/Button';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -25,22 +25,33 @@ const reducer = (state, action) => {
       return { ...state, loadingUpdate: false };
     case 'UPDATE_FAIL':
       return { ...state, loadingUpdate: false };
+    case 'UPLOAD_REQUEST':
+      return { ...state, loadingUpload: true, errorUpload: '' };
+    case 'UPLOAD_SUCCESS':
+      return {
+        ...state,
+        loadingUpload: false,
+        errorUpload: '',
+      };
+    case 'UPLOAD_FAIL':
+      return { ...state, loadingUpload: false, errorUpload: action.payload };
+
     default:
       return state;
   }
 };
-const ProductEditScreen = () => {
+export default function ProductEditScreen() {
   const navigate = useNavigate();
-  const params = useParams();
+  const params = useParams(); // /product/:id
   const { id: productId } = params;
 
   const { state } = useContext(Store);
   const { userInfo } = state;
-
-  const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: '',
-  });
+  const [{ loading, error, loadingUpdate, loadingUpload }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      error: '',
+    });
 
   const [name, setName] = useState('');
   const [slug, setSlug] = useState('');
@@ -93,20 +104,40 @@ const ProductEditScreen = () => {
           description,
         },
         {
-          headers: { authorization: `Bearer ${userInfo.token}` },
+          headers: { Authorization: `Bearer ${userInfo.token}` },
         }
       );
       dispatch({
         type: 'UPDATE_SUCCESS',
       });
-      toast.success('Product updated successfully.');
+      toast.success('Product updated successfully');
       navigate('/admin/products');
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'UPDATE_FAIL' });
     }
   };
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append('file', file);
+    try {
+      dispatch({ type: 'UPLOAD_REQUEST' });
+      const { data } = await axios.post('/api/upload', bodyFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+      dispatch({ type: 'UPLOAD_SUCCESS' });
 
+      toast.success('Image uploaded successfully');
+      setImage(data.secure_url);
+    } catch (err) {
+      toast.error(getError(err));
+      dispatch({ type: 'UPLOAD_FAIL', payload: getError(err) });
+    }
+  };
   return (
     <Container className="small-container">
       <Helmet>
@@ -115,7 +146,7 @@ const ProductEditScreen = () => {
       <h1>Edit Product {productId}</h1>
 
       {loading ? (
-        <LoadingBox />
+        <LoadingBox></LoadingBox>
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
@@ -136,7 +167,7 @@ const ProductEditScreen = () => {
               required
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="price">
+          <Form.Group className="mb-3" controlId="name">
             <Form.Label>Price</Form.Label>
             <Form.Control
               value={price}
@@ -145,26 +176,24 @@ const ProductEditScreen = () => {
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="image">
-            <Form.Label>Image</Form.Label>
+            <Form.Label>Image File</Form.Label>
             <Form.Control
               value={image}
               onChange={(e) => setImage(e.target.value)}
               required
             />
           </Form.Group>
+          <Form.Group className="mb-3" controlId="imageFile">
+            <Form.Label>Upload File</Form.Label>
+            <Form.Control type="file" onChange={uploadFileHandler} />
+            {loadingUpload && <LoadingBox></LoadingBox>}
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="category">
             <Form.Label>Category</Form.Label>
             <Form.Control
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="countInStock">
-            <Form.Label>Count In Stock</Form.Label>
-            <Form.Control
-              value={countInStock}
-              onChange={(e) => setCountInStock(e.target.value)}
               required
             />
           </Form.Group>
@@ -176,6 +205,14 @@ const ProductEditScreen = () => {
               required
             />
           </Form.Group>
+          <Form.Group className="mb-3" controlId="countInStock">
+            <Form.Label>Count In Stock</Form.Label>
+            <Form.Control
+              value={countInStock}
+              onChange={(e) => setCountInStock(e.target.value)}
+              required
+            />
+          </Form.Group>
           <Form.Group className="mb-3" controlId="description">
             <Form.Label>Description</Form.Label>
             <Form.Control
@@ -184,16 +221,14 @@ const ProductEditScreen = () => {
               required
             />
           </Form.Group>
-          <div>
+          <div className="mb-3">
             <Button disabled={loadingUpdate} type="submit">
               Update
             </Button>
-            {loadingUpdate && <LoadingBox />}
+            {loadingUpdate && <LoadingBox></LoadingBox>}
           </div>
         </Form>
       )}
     </Container>
   );
-};
-
-export default ProductEditScreen;
+}

@@ -3,6 +3,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import connectDB from './config/connection.js';
 
+import uploadRoutes from './routes/uploadRoutes.js';
 import seedRoutes from './routes/seedRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -20,6 +21,7 @@ app.get('/api/keys/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
 });
 
+app.use('/api/upload', uploadRoutes);
 app.use('/api/seed', seedRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
