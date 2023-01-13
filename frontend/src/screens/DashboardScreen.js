@@ -89,7 +89,7 @@ const DashboardScreen = () => {
                   <Card.Title>
                     $
                     {summary.orders && summary.users[0]
-                      ? summary.orders[0].totalSales.toFixed()
+                      ? summary.orders[0]?.totalSales?.toFixed()
                       : 0}
                   </Card.Title>
                   <Card.Text> Orders</Card.Text>
