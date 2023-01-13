@@ -43,6 +43,16 @@ const updateProduct = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const deleteProduct = expressAsyncHandler(async (req, res) => {
+  console.log('hit route');
+  const product = await Product.findById(req.params.id);
+  if (product) {
+    await product.remove();
+    res.send('Product deleted');
+  } else {
+    res.status(404).send({ message: 'Product Not Found' });
+  }
+});
 const PAGE_SIZE = 3;
 
 const adminProducts = expressAsyncHandler(async (req, res) => {
@@ -170,4 +180,5 @@ export {
   adminProducts,
   createProduct,
   updateProduct,
+  deleteProduct,
 };

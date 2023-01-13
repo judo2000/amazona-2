@@ -9,12 +9,16 @@ import {
   adminProducts,
   createProduct,
   updateProduct,
+  deleteProduct,
 } from '../controllers/productController.js';
 import { isAdmin, isAuth } from '../utils.js';
 
 router.route('/').get(getProducts);
 router.route('/').post(createProduct);
-router.route('/:id').put(updateProduct);
+router
+  .route('/:id')
+  .put(isAuth, isAdmin, updateProduct)
+  .delete(isAuth, isAdmin, deleteProduct);
 router.route('/admin').get(isAuth, isAdmin, adminProducts);
 router.route('/search').get(searchProducts);
 router.route('/categories').get(getCategories);
