@@ -8,11 +8,13 @@ import {
   searchProducts,
   adminProducts,
   createProduct,
+  updateProduct,
 } from '../controllers/productController.js';
 import { isAdmin, isAuth } from '../utils.js';
 
 router.route('/').get(getProducts);
 router.route('/').post(createProduct);
+router.route('/:id').put(updateProduct);
 router.route('/admin').get(isAuth, isAdmin, adminProducts);
 router.route('/search').get(searchProducts);
 router.route('/categories').get(getCategories);
