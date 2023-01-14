@@ -7,6 +7,7 @@ import {
   getMyOrders,
   getOrderSummary,
   getSingleOrder,
+  setOrderToDelivered,
   setOrderToPaid,
 } from '../controllers/orderController.js';
 
@@ -16,5 +17,6 @@ router.route('/summary').get(isAuth, isAdmin, getOrderSummary);
 router.route('/mine').get(isAuth, getMyOrders);
 router.route('/:id').get(isAuth, getSingleOrder);
 router.route('/:id/pay').put(isAuth, setOrderToPaid);
+router.route('/:id/deliver').put(isAuth, isAdmin, setOrderToDelivered);
 
 export default router;

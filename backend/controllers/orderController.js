@@ -6,7 +6,7 @@ import Product from '../models/ProductModel.js';
 
 // Admin
 const getAllOrders = expressAsyncHandler(async (req, res) => {
-  const orders = await Order.find().populate('user', 'firstName, lastName');
+  const orders = await Order.find().populate('user', 'firstName lastName');
   res.send(orders);
 });
 
@@ -100,6 +100,18 @@ const setOrderToPaid = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// Admin
+const setOrderToDelivered = expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+    await order.save();
+    res.send({ message: 'Order delivered' });
+  } else {
+    res.status(404).send({ message: 'Order Not Found' });
+  }
+});
 export {
   getAllOrders,
   createOrder,
@@ -107,4 +119,5 @@ export {
   setOrderToPaid,
   getMyOrders,
   getOrderSummary,
+  setOrderToDelivered,
 };
