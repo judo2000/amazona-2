@@ -11,6 +11,29 @@ const getAllUsers = expressAsyncHandler(async (req, res) => {
   res.send(users);
 });
 
+// Admin
+const getUserById = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    res.send(user);
+  } else {
+    res.status(404).send({ message: 'User Not Found' });
+  }
+});
+
+const updateUserByAdmin = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
+    user.email = req.body.email || user.email;
+    user.isAdmin = Boolean(req.body.isAdmin);
+    const updateUser = await user.save();
+    res.send({ message: 'User Updated', user: updateUser });
+  } else {
+    res.status(404).send({ message: 'User Not Found' });
+  }
+});
 const signinUser = expressAsyncHandler(async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (user) {
@@ -75,4 +98,11 @@ const getUserProfile = expressAsyncHandler(async (req, res) => {
   }
 });
 
-export { getAllUsers, signinUser, signupUser, getUserProfile };
+export {
+  getAllUsers,
+  signinUser,
+  signupUser,
+  getUserProfile,
+  getUserById,
+  updateUserByAdmin,
+};
