@@ -4,6 +4,12 @@ import Order from '../models/OrderModel.js';
 import User from '../models/UserModel.js';
 import Product from '../models/ProductModel.js';
 
+// Admin
+const getAllOrders = expressAsyncHandler(async (req, res) => {
+  const orders = await Order.find().populate('user', 'firstName, lastName');
+  res.send(orders);
+});
+
 const createOrder = expressAsyncHandler(async (req, res) => {
   const newOrder = new Order({
     orderItems: req.body.orderItems.map((x) => ({ ...x, product: x._id })),
@@ -95,6 +101,7 @@ const setOrderToPaid = expressAsyncHandler(async (req, res) => {
 });
 
 export {
+  getAllOrders,
   createOrder,
   getSingleOrder,
   setOrderToPaid,

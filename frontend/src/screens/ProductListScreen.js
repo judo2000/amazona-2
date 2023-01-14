@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useContext, useEffect, useReducer } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
+import Table from 'react-bootstrap/esm/Table';
 import Row from 'react-bootstrap/Row';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -151,7 +152,7 @@ const ProductListScreen = () => {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <>
-          <table className="table">
+          <Table responsive striped className="table">
             <thead>
               <tr>
                 <td>ID</td>
@@ -190,7 +191,7 @@ const ProductListScreen = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
           <div>
             {[...Array(pages).keys()].map((x) => (
               <Link
