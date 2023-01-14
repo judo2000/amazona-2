@@ -3,6 +3,7 @@ const router = express.Router();
 import { isAuth, isAdmin } from '../utils.js';
 import {
   createOrder,
+  deleteOrder,
   getAllOrders,
   getMyOrders,
   getOrderSummary,
@@ -18,5 +19,6 @@ router.route('/mine').get(isAuth, getMyOrders);
 router.route('/:id').get(isAuth, getSingleOrder);
 router.route('/:id/pay').put(isAuth, setOrderToPaid);
 router.route('/:id/deliver').put(isAuth, isAdmin, setOrderToDelivered);
+router.route('/:id').delete(isAuth, isAdmin, deleteOrder);
 
 export default router;
