@@ -4,6 +4,13 @@ import expressAsyncHandler from 'express-async-handler';
 import User from '../models/UserModel.js';
 import { generateToken } from '../utils.js';
 
+// Admin
+const getAllUsers = expressAsyncHandler(async (req, res) => {
+  const users = await User.find();
+
+  res.send(users);
+});
+
 const signinUser = expressAsyncHandler(async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (user) {
@@ -68,4 +75,4 @@ const getUserProfile = expressAsyncHandler(async (req, res) => {
   }
 });
 
-export { signinUser, signupUser, getUserProfile };
+export { getAllUsers, signinUser, signupUser, getUserProfile };
