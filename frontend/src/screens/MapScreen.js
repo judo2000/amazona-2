@@ -98,29 +98,31 @@ export default function MapScreen() {
   };
   return (
     <div className="full-box">
-      <LoadScript libraries={libs} googleMapsApiKey={googleApiKey}>
-        <GoogleMap
-          id="smaple-map"
-          mapContainerStyle={{ height: '100%', width: '100%' }}
-          center={center}
-          zoom={15}
-          onLoad={onLoad}
-          onIdle={onIdle}
-        >
-          <StandaloneSearchBox
-            onLoad={onLoadPlaces}
-            onPlacesChanged={onPlacesChanged}
+      {googleApiKey && (
+        <LoadScript libraries={libs} googleMapsApiKey={googleApiKey}>
+          <GoogleMap
+            id="smaple-map"
+            mapContainerStyle={{ height: '100%', width: '100%' }}
+            center={center}
+            zoom={15}
+            onLoad={onLoad}
+            onIdle={onIdle}
           >
-            <div className="map-input-box">
-              <input type="text" placeholder="Enter your address"></input>
-              <Button type="button" onClick={onConfirm}>
-                Confirm
-              </Button>
-            </div>
-          </StandaloneSearchBox>
-          <Marker position={location} onLoad={onMarkerLoad}></Marker>
-        </GoogleMap>
-      </LoadScript>
+            <StandaloneSearchBox
+              onLoad={onLoadPlaces}
+              onPlacesChanged={onPlacesChanged}
+            >
+              <div className="map-input-box">
+                <input type="text" placeholder="Enter your address"></input>
+                <Button type="button" onClick={onConfirm}>
+                  Confirm
+                </Button>
+              </div>
+            </StandaloneSearchBox>
+            <Marker position={location} onLoad={onMarkerLoad}></Marker>
+          </GoogleMap>
+        </LoadScript>
+      )}
     </div>
   );
 }
