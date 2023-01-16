@@ -6,6 +6,14 @@ export const product_reducer = (state, action) => {
       return { ...state, product: action.payload, loading: false };
     case 'FETCH_PRODUCT_FAIL':
       return { ...state, loading: false, error: action.payload };
+    case 'REFRESH_PRODUCT':
+      return { ...state, product: action.payload };
+    case 'CREATE_REVIEW_REQUEST':
+      return { ...state, loadingCreateReview: true };
+    case 'CREATE_REVIEW_SUCCESS':
+      return { ...state, loadingCreateReview: false };
+    case 'CREATE_REVIEW_FAIL':
+      return { ...state, loadingCreateReview: false };
     default:
       return state;
   }

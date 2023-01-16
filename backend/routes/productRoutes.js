@@ -10,6 +10,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  createReview,
 } from '../controllers/productController.js';
 import { isAdmin, isAuth } from '../utils.js';
 
@@ -19,6 +20,7 @@ router
   .route('/:id')
   .put(isAuth, isAdmin, updateProduct)
   .delete(isAuth, isAdmin, deleteProduct);
+router.route('/:id/reviews').post(isAuth, createReview);
 router.route('/admin').get(isAuth, isAdmin, adminProducts);
 router.route('/search').get(searchProducts);
 router.route('/categories').get(getCategories);

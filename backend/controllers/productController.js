@@ -44,7 +44,6 @@ const updateProduct = expressAsyncHandler(async (req, res) => {
 });
 
 const deleteProduct = expressAsyncHandler(async (req, res) => {
-  console.log('hit route');
   const product = await Product.findById(req.params.id);
   if (product) {
     await product.remove();
@@ -53,6 +52,40 @@ const deleteProduct = expressAsyncHandler(async (req, res) => {
     res.status(404).send({ message: 'Product Not Found' });
   }
 });
+
+const createReview = expressAsyncHandler(async (req, res) => {
+  const productId = req.params.id;
+  const product = await Product.findById(productId);
+  const userId = req.user._id;
+  if (product) {
+    if (product.reviews.find((x) => x.user == userId)) {
+      return res
+        .status(400)
+        .send({ message: 'You already submitted a review ' });
+    }
+    const review = {
+      name: req.body.name,
+      rating: Number(req.body.rating),
+      comment: req.body.comment,
+      user: userId,
+    };
+    product.reviews.push(review);
+    product.numReviews = product.reviews.length;
+    product.rating =
+      product.reviews.reduce((a, c) => c.rating + a, 0) /
+      product.reviews.length;
+    const updatedProduct = await product.save();
+    res.status(201).send({
+      message: 'Review Created',
+      review: updatedProduct.reviews[updatedProduct.reviews.length - 1],
+      numReviews: product.numReviews,
+      rating: product.rating,
+    });
+  } else {
+    res.status(404).send({ message: 'Product Not Found' });
+  }
+});
+
 const PAGE_SIZE = 3;
 
 const adminProducts = expressAsyncHandler(async (req, res) => {
@@ -181,4 +214,5 @@ export {
   createProduct,
   updateProduct,
   deleteProduct,
+  createReview,
 };
