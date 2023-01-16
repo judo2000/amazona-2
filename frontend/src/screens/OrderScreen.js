@@ -211,15 +211,17 @@ const OrderScreen = () => {
                 {order.shippingAddress.city}, {order.shippingAddress.postalCode}
                 , {order.shippingAddress.country}
                 &nbsp;
-                {order.shippingAddress.location.lat &&
-                  order.shippingAddress.location.lng && (
-                    <a
-                      target="_new"
-                      href={`https://maps.google.com?q=${order.shippingAddress.location.lat},${order.shippingAddress.location.lng}`}
-                    >
-                      Show on Map
-                    </a>
-                  )}
+                {order.shippingAddress.location
+                  ? order.shippingAddress.location.lat &&
+                    order.shippingAddress.location.lng && (
+                      <a
+                        target="_new"
+                        href={`https://maps.google.com?q=${order.shippingAddress.location.lat},${order.shippingAddress.location.lng}`}
+                      >
+                        Show on Map
+                      </a>
+                    )
+                  : ''}
               </Card.Text>
               {order.isDelivered ? (
                 <MessageBox variant="success">

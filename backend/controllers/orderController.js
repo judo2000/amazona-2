@@ -3,6 +3,7 @@ import expressAsyncHandler from 'express-async-handler';
 import Order from '../models/OrderModel.js';
 import User from '../models/UserModel.js';
 import Product from '../models/ProductModel.js';
+import { mailgun, payOrderEmailTemplate } from '../utils.js';
 
 // Admin
 const getAllOrders = expressAsyncHandler(async (req, res) => {
@@ -82,7 +83,10 @@ const getSingleOrder = expressAsyncHandler(async (req, res) => {
 });
 
 const setOrderToPaid = expressAsyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
+  const order = await Order.findById(req.params.id).populate(
+    'user',
+    'email firstName'
+  );
   if (order) {
     order.isPaid = true;
     order.paidAt = Date.now();
@@ -94,6 +98,24 @@ const setOrderToPaid = expressAsyncHandler(async (req, res) => {
     };
 
     const updatedOrder = await order.save();
+    mailgun()
+      .messages()
+      .send(
+        {
+          from: 'Amazona <amazona@mg.yourdomain.com>',
+          to: `${order.user.firstName} <${order.user.email}>`,
+          subject: `New order ${order._id}`,
+          html: payOrderEmailTemplate(order),
+        },
+        (error, body) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log(body);
+          }
+        }
+      );
+    console.log(order.user.email);
     res.send({ message: 'Order Paid', order: updatedOrder });
   } else {
     res.status(404).send({ message: 'Order Not Found' });
