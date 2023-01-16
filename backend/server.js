@@ -21,6 +21,10 @@ app.get('/api/keys/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
 });
 
+app.get('/api/keys/google', (req, res) => {
+  res.send({ key: process.env.GOOGLE_API_KEY || '' });
+});
+
 app.use('/api/upload', uploadRoutes);
 app.use('/api/seed', seedRoutes);
 app.use('/api/products', productRoutes);
